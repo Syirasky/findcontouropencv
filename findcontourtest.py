@@ -65,20 +65,13 @@ newedged = cv2.Canny(newimblur,75,700)
 
 #nk cari circle dlm rectangle
 
-cropped = cv2.imread('cropped.jpeg',0)
+cropped = cv2.imread('cropped.jpeg')
+graycrop = cv2.cvtColor(cropped,cv2.COLOR_BGR2GRAY)
+blur1 =  cv2.medianBlur(graycrop,1,0)
+thresh1 = cv2.adaptiveThreshold(blur1,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
 
-imgcr = cv2.medianBlur(cropped,1)
-cimgcr = cv2.cvtColor(imgcr,cv2.COLOR_GRAY2BGR)
-circles = cv2.HoughCircles(imgcr,cv2.HOUGH_GRADIENT,1.2,100,param1=50,param2=30,minRadius=0,maxRadius=0)
-    
-circles = np.uint16(np.around(circles))
-for i in circles[0,:]:
-	# draw the outer circle
-	cv2.circle(cimgcr,(i[0],i[1]),i[2],(0,255,0),2)
-	# draw the center of the circle
-	cv2.circle(cimgcr,(i[0],i[1]),2,(0,0,255),3)
-   
-cv2.imshow('detected circles',cimgcr)
+
+cv2.imshow('detected circles',thresh1)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
